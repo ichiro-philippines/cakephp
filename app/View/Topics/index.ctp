@@ -30,12 +30,13 @@
                 $topic['Topic']['id']
             )); ?>
         </td>
-        <td><?php echo $this->HTML->link('Delete',
+        <td><?php echo $this->Form->postLink('Delete',
             array(
                 'controller' => 'topics',
                 'action' => 'delete',
-                $topic['Topic']['id']
-            )); ?>
+                $topic['Topic']['id']),
+                array('confirm' => 'Are you sure you want to delete this topic?')
+            ); ?>
         </td>
     </tr>
     <?php endforeach; ?>
