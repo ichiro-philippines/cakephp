@@ -32,6 +32,6 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
     public $componets = array(
-        "DebugKit.Toolbar"
+        "DebugKit.Toolbar", "Session", "Auth"
     );
 }

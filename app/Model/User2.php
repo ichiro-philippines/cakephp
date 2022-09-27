@@ -9,7 +9,7 @@ App::uses('Model', 'Model');
  *
  * @package       app.Model
  */
-class Topic extends AppModel {
+class User extends AppModel {
 
     public $displayFild = 'title';
 
@@ -19,22 +19,22 @@ class Topic extends AppModel {
                 'rule' => array('notBlank'),
             ),
         ),
-        'user_id' => array(
+        'username' => array(
             'numeric' => array(
                 'rule' => array('numeric'),
             ),
         ),
-        'title' => array(
+        'password' => array(
             'notBlank' => array(
                 'rule' => array('notBlank'),
             ),
         ),
-        'visible' => array(
+        'full_name' => array(
             'notBlank' => array(
                 'rule' => array('notBlank'),
             ),
         ),
-        'status' => array(
+        'role' => array(
             'notBlank' => array(
                 'rule' => array('notBlank'),
             ),
@@ -46,9 +46,9 @@ class Topic extends AppModel {
     );
 
     public $hasMany = array(
-        'Post' => array(
-            'className' => 'Post',
-            'foreignKey' => 'topic_id',
+        'Topic' => array(
+            'className' => 'Topic',
+            'foreignKey' => 'user_id',
             'dependent' => false,
             'conditions' => '',
             'fields' => '',

@@ -1,17 +1,9 @@
 <?php
 App::uses('Model', 'Model');
 
-/**
- * Application model for Cake.
- *
- * Add your application-wide methods in the class below, your models
- * will inherit them.
- *
- * @package       app.Model
- */
-class Topic extends AppModel {
+class Post extends AppModel {
 
-    public $displayFild = 'title';
+    public $belongsTo = 'Topic';
 
     public $validate = array(
         'id' => array(
@@ -20,6 +12,11 @@ class Topic extends AppModel {
             ),
         ),
         'user_id' => array(
+            'numeric' => array(
+                'rule' => array('numeric'),
+            ),
+        ),
+        'topic_id' => array(
             'numeric' => array(
                 'rule' => array('numeric'),
             ),
@@ -43,21 +40,5 @@ class Topic extends AppModel {
         ),
         'modified' => array(
         ),
-    );
-
-    public $hasMany = array(
-        'Post' => array(
-            'className' => 'Post',
-            'foreignKey' => 'topic_id',
-            'dependent' => false,
-            'conditions' => '',
-            'fields' => '',
-            'order' => '',
-            'limit' => '',
-            'offset' => '',
-            'exclusive' => '',
-            'finderQuery' => '',
-            'counterQuery' =>' '
-        )
     );
 }
