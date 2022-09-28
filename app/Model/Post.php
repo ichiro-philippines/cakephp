@@ -21,12 +21,7 @@ class Post extends AppModel {
                 'rule' => array('numeric'),
             ),
         ),
-        'title' => array(
-            'notBlank' => array(
-                'rule' => array('notBlank'),
-            ),
-        ),
-        'visible' => array(
+        'body' => array(
             'notBlank' => array(
                 'rule' => array('notBlank'),
             ),

@@ -26,8 +26,9 @@
                         array(
                             'controller' => 'posts',
                             'action' => 'view',
-                            $post['Post']['topic_id']
+                            $post['Post']['id']
                         ));
+
                     ?>
                 </td>
             </tr>

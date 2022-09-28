@@ -15,34 +15,47 @@ class UsersController extends AppController {
  */
 	public $components = array('Paginator', 'Auth');
 
+/**
+ * Overhead processing
+ *
+ */
 	public function beforeFilter() {
 		$this->Auth->allow('add');
 	}
 
 /**
+ * get user's name by ID
+ *
+ * @return array
+ */
+	public function getUserNameById($id) {
+		$data = $this->User->findById($id);
+		return $data;
+	}
+/**
  * login method
  *
  * @return void
  */
-public function login() {
-	if ($this->request->is('post')) {
-		if ($this->Auth->login()) {
-			return $this->redirect($this->Auth->redirectUrl());
-		} else {
-			$this->Sesion->setFlash('Invalid Username or password');
+	public function login() {
+		if ($this->request->is('post')) {
+			if ($this->Auth->login()) {
+				return $this->redirect($this->Auth->redirectUrl());
+			} else {
+				$this->Session->setFlash('Invalid Username or password');
+			}
 		}
 	}
-}
 
 /**
  * logout method
  *
  * @return void
  */
-public function logout() {
-	$this->Auth->logout();
-	$this->redirect('/topics/index');
-}
+	public function logout() {
+		$this->Auth->logout();
+		$this->redirect('/topics/index');
+	}
 
 /**
  * index method
@@ -50,6 +63,15 @@ public function logout() {
  * @return void
  */
 	public function index() {
+        $role = Configure::read('USERS_ROLE_LIST');
+        if (AuthComponent::user('role') == $role['ROLE_REGULAR']) {
+            $this->redirect(
+                array(
+                'contoroller' => 'topics',
+                'action' => 'index'
+            ));
+        }
+		
 		$this->User->recursive = 0;
 		$this->set('users', $this->Paginator->paginate());
 	}
@@ -62,6 +84,15 @@ public function logout() {
  * @return void
  */
 	public function view($id = null) {
+        $role = Configure::read('USERS_ROLE_LIST');
+        if (AuthComponent::user('role') == $role['ROLE_REGULAR']) {
+            $this->redirect(
+                array(
+                'contoroller' => 'topics',
+                'action' => 'index'
+            ));
+        }
+
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
@@ -96,6 +127,15 @@ public function logout() {
  * @return void
  */
 	public function edit($id = null) {
+        $role = Configure::read('USERS_ROLE_LIST');
+        if (AuthComponent::user('role') == $role['ROLE_REGULAR']) {
+            $this->redirect(
+                array(
+                'contoroller' => 'topics',
+                'action' => 'index'
+            ));
+        }
+
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
@@ -120,6 +160,15 @@ public function logout() {
  * @return void
  */
 	public function delete($id = null) {
+        $role = Configure::read('USERS_ROLE_LIST');
+        if (AuthComponent::user('role') == $role['ROLE_REGULAR']) {
+            $this->redirect(
+                array(
+                'contoroller' => 'topics',
+                'action' => 'index'
+            ));
+        }
+
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}

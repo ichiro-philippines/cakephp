@@ -1,1 +1,1 @@
-<?php echo $post['Post']['body']; ?>
+<p><?php echo $post['Post']['body']; ?></p>

@@ -1,4 +1,9 @@
 <h1>Topics</h1>
+<?php if (AuthComponent::user()) :?>
+    <p>Login user: <?php echo AuthComponent::user('username') ?> (Role: <?php echo AuthComponent::user('role') ?>)</p>
+<?php else: ?>
+    <p>Not Login User</p>
+<?php endif; ?>
 <?php echo $this->HTML->link('Create a post in this topic',
     array(
         'controller' => 'topics',
@@ -18,6 +23,10 @@
         array(
             'controller' => 'users',
             'action' => 'login'
+        )) . ' or ' . $this->HTML->link('Ragister',
+        array(
+            'controller' => 'users',
+            'action' => 'add'
         ));
     }
 
@@ -27,16 +36,23 @@
     <tr>
         <th>Title</th>
         <th>User ID</th>
-        <th>Published</th>
         <th>Created</th>
         <th>Modified</th>
-        <th>Edit</th>
-        <th>Delete</th>
+        <?php 
+            $role = Configure::read('USERS_ROLE_LIST');
+            if (AuthComponent::user('role') == $role['ROLE_ADMIN']) :
+        ?>
+            <th>Published</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        <?php endif; ?>
+
     </tr>
     <?php foreach($topics as $topic): ?>
         <?php
-            $status = Configure::read("TOPICS_STATUS_LIST");
-            if ($topic['Topic']['status'] == $status["STATUS_SHOW"] && AuthComponent::user('role') == 2) :
+            $status = Configure::read('TOPICS_STATUS_LIST');
+            $visible = Configure::read('VISIBLE_LIST');
+            if ($topic['Topic']['status'] == $status["STATUS_SHOW"] && AuthComponent::user('role') == $role['ROLE_ADMIN']) :
         ?>
             <tr>
                 <td>
@@ -49,10 +65,11 @@
                         ));
                     ?>
                 </td>
-                <td><?php echo $topic['Topic']['user_id']; ?></td>
-                <td><?php echo $topic['Topic']['visible']; ?></td>
+                <td><?php echo $topic['User']['username']; ?></td>
                 <td><?php echo $topic['Topic']['created']; ?></td>
                 <td><?php echo $topic['Topic']['modified']; ?></td>
+                <?php if (AuthComponent::user('role') == $role['ROLE_ADMIN']) :?>
+                <td><?php echo $topic['Topic']['visible']; ?></td>
                 <td>
                     <?php
                         echo $this->HTML->link('Edit',
@@ -75,11 +92,13 @@
                         );
                     ?>
                 </td>
+                <?php endif; ?>
             </tr>
         <?php endif; ?>
         <?php
-            $status = Configure::read("TOPICS_STATUS_LIST");
-            if (($topic['Topic']['status'] == $status["STATUS_SHOW"] || AuthComponent::user()) && AuthComponent::user('role') == 1 && $topic['Topic']['visible'] == 1) :
+            if ($topic['Topic']['status'] == $status["STATUS_SHOW"]
+            && (AuthComponent::user('role') == $role['ROLE_REGULAR'] || !AuthComponent::user())
+            && $topic['Topic']['visible'] == $visible['VISIBLE_ALL_USER']) :
         ?>
             <tr>
                 <td>
@@ -92,10 +111,11 @@
                         ));
                     ?>
                 </td>
-                <td><?php echo $topic['Topic']['user_id']; ?></td>
-                <td><?php echo $topic['Topic']['visible']; ?></td>
+                <td><?php echo $topic['User']['username']; ?></td>
                 <td><?php echo $topic['Topic']['created']; ?></td>
                 <td><?php echo $topic['Topic']['modified']; ?></td>
+                <?php if (AuthComponent::user('role') == $role['ROLE_ADMIN']) :?>
+                <td><?php echo $topic['Topic']['visible']; ?></td>
                 <td>
                     <?php
                         echo $this->HTML->link('Edit',
@@ -118,6 +138,7 @@
                         );
                     ?>
                 </td>
+                <?php endif; ?>
             </tr>
         <?php endif; ?>
     <?php endforeach; ?>

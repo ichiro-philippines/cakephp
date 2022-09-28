@@ -1,3 +1,4 @@
+<?php App::import('Controller', 'Users'); ?>
 <h1><?php echo $topic['Topic']['title']; ?></h1>
 
 <?php echo $this->HTML->link('Create a post in this post',
@@ -5,7 +6,7 @@
         'controller' => 'posts',
         'action' => 'add',
         $topic['Topic']['id']
-    )); 
+    ));
 ?>
 <br>
 <table>
@@ -13,7 +14,9 @@
 <?php
     $counter = 1;
     foreach ($topic['Post'] as $post) {
-        echo '<tr><td>' . $counter . '</td><td>' . $post['user_id'] . '</td><td>' . $post['body'] . '</td></tr>';
+        $ucontroller = new UsersController();
+        $uname = $ucontroller->getUserNameById($post['user_id']);
+        echo '<tr><td>' . $counter . '</td><td>' . $uname['User']['username'] . '</td><td>' . $post['body'] . '</td></tr>';
         $counter++;
     }
 ?>
